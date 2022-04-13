@@ -22,11 +22,29 @@ const App = () => {
     setSelectedFile(event.target.files[0]);
   }
 
+  const clearSelectedFile = () => {
+    setSelectedFile();
+  }
+
+  const predictFelling = () => {
+    if(selectedFile) {
+      console.log("Analisando");
+    } else {
+      console.log("Nenhuma imagem para analisar");
+    }
+  }
+
   return (
     <div className="App">
       <h1>AM Project Name</h1>
+      {selectedFile ? 
+      <img className="previewImg" alt="Preview" src={preview} /> : 
+      <div></div>
+      }
       <input type="file" accept=".jpg, .jpeg, .png" onChange={fileSelectedHandler} />
-      {selectedFile &&  <img className="previewImg" alt="Preview" src={preview} /> }
+      {/* State when clearing not updating correct find out why */}
+      {/* <button onClick={clearSelectedFile}>Clear Image</button> */}
+      <button onClick={predictFelling}>Prever Sentimento</button>
     </div>
   );
 }

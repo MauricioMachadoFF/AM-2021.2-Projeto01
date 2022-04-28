@@ -10,9 +10,10 @@ import './App.css';
 
 const SPaper = styled(Paper)({
   backgroundColor: 'white',
-  height: '600px',
+  height: '700px',
   width: '80%',
   maxWidth: '1000px',
+  minWidth: '600px',
   margin: 'auto',
   marginTop: '100px',
 
@@ -23,6 +24,7 @@ const SPaper = styled(Paper)({
 
 const Title = styled(Typography)({
   marginTop: '8px',
+  // marginBottom: '10px',
   color: '#2c6fd1',
   borderBottom: '1px solid black',
   width: '60%',
@@ -47,12 +49,21 @@ const Input = styled('input')({
 })
 
 const ImgPreview = styled('img')({
-  maxWidth: '256px',
+  height: '496px'
 })
 
 const SButton = styled(Button)({
   marginTop: '10px',
-  marginBottom: '10px'
+})
+
+const MainButton = styled(SButton)({
+  width: '200px'
+})
+
+const NoImageDiv = styled('div')({
+  height: '496px',
+  width: '496px',
+  backgroundColor: 'whitesmoke'
 })
 
 const App = () => {
@@ -92,11 +103,13 @@ const App = () => {
     <SPaper elevation={6} className="App">
       <Title variant="h4">Expression Recognizer</Title>
       <Container>
-        <SStack spacing={0.5}>
-          {selectedFile &&
-          <ImgPreview alt="Preview" src={preview} />
-          }
-          <label>
+        <SStack spacing={0.5} alignItems="center">
+          {selectedFile ? (
+            <ImgPreview alt="Preview" src={preview} />
+          ) : (
+            <NoImageDiv />
+          )}
+          <label style={{marginBottom: '10px'}}>
             <Input type="file" accept=".jpg, .jpeg, .png" onChange={fileSelectedHandler} />
             <SButton id="upload-button" variant="outlined" size="small" component="span">
               Escolher Arquivo
@@ -104,7 +117,7 @@ const App = () => {
           </label>
           {/* State when clearing not updating correct find out why */}
           {/* <button onClick={clearSelectedFile}>Clear Image</button> */}
-          <Button variant="contained" onClick={predictFelling}>Prever Sentimento</Button>
+          <MainButton variant="contained" onClick={predictFelling}>Prever Sentimento</MainButton>
         </SStack>
       </Container>
     </SPaper>

@@ -8,12 +8,14 @@ import {
 import { styled } from '@mui/material/styles';
 import './App.css';
 
+import EMOTIONS from './emotions.js'
+
 const SPaper = styled(Paper)({
   backgroundColor: 'white',
   height: '700px',
   width: '80%',
   maxWidth: '1000px',
-  minWidth: '600px',
+  minWidth: '900px',
   margin: 'auto',
   marginTop: '100px',
 
@@ -24,11 +26,13 @@ const SPaper = styled(Paper)({
 
 const Title = styled(Typography)({
   marginTop: '8px',
-  // marginBottom: '10px',
   color: '#2c6fd1',
-  borderBottom: '1px solid black',
   width: '60%',
   textAlign: 'center'
+})
+
+const Result = styled(Typography)({
+  color: '#2c6fd1',
 })
 
 const Container = styled('div')({
@@ -57,7 +61,8 @@ const SButton = styled(Button)({
 })
 
 const MainButton = styled(SButton)({
-  width: '200px'
+  width: '250px',
+  marginBottom: '10px',
 })
 
 const NoImageDiv = styled('div')({
@@ -69,6 +74,7 @@ const NoImageDiv = styled('div')({
 const App = () => {
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState()
+  const [emotionPredicted, setEmotionPredicted] = useState();
 
   useEffect(() => {
     if (!selectedFile) {
@@ -87,10 +93,6 @@ const App = () => {
     setSelectedFile(event.target.files[0]);
   }
 
-  const clearSelectedFile = () => {
-    setSelectedFile();
-  }
-
   const predictFelling = () => {
     if (selectedFile) {
       var formData = new FormData()
@@ -100,7 +102,9 @@ const App = () => {
 
       oReq.onload = function (oEvent) {
         if (oReq.status === 200) {
-          console.log(oReq.response)
+          const response = JSON.parse(oReq.response)
+          console.log(response)
+          setEmotionPredicted(EMOTIONS[response.result])
         }
       }
 
@@ -108,7 +112,7 @@ const App = () => {
 
 
     } else {
-      console.log("Nenhuma imagem para analisar");
+      window.alert('Nenhuma imagem foi inserida')
     }
   }
 
@@ -128,9 +132,8 @@ const App = () => {
               Escolher Arquivo
             </SButton>
           </label>
-          {/* State when clearing not updating correct find out why */}
-          {/* <button onClick={clearSelectedFile}>Clear Image</button> */}
           <MainButton variant="contained" onClick={predictFelling}>Prever Sentimento</MainButton>
+          {emotionPredicted && <Result variant="h5">O resultado é: {emotionPredicted}</Result>}
         </SStack>
       </Container>
     </SPaper>

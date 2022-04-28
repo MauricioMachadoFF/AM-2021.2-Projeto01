@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { 
+import {
   Button,
-  Paper, 
+  Paper,
   Typography,
-  Stack 
+  Stack
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import './App.css';
@@ -72,8 +72,8 @@ const App = () => {
 
   useEffect(() => {
     if (!selectedFile) {
-        setPreview(undefined)
-        return
+      setPreview(undefined)
+      return
     }
 
     const objectUrl = URL.createObjectURL(selectedFile)
@@ -81,7 +81,7 @@ const App = () => {
 
     // free memory when ever this component is unmounted
     return () => URL.revokeObjectURL(objectUrl);
-}, [selectedFile])
+  }, [selectedFile])
 
   const fileSelectedHandler = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -92,8 +92,21 @@ const App = () => {
   }
 
   const predictFelling = () => {
-    if(selectedFile) {
-      console.log("Analisando");
+    if (selectedFile) {
+      var formData = new FormData()
+      formData.append('file', selectedFile)
+      var oReq = new XMLHttpRequest();
+      oReq.open("POST", "http://localhost:9874/", true)
+
+      oReq.onload = function (oEvent) {
+        if (oReq.status === 200) {
+          console.log(oReq.response)
+        }
+      }
+
+      oReq.send(formData)
+
+
     } else {
       console.log("Nenhuma imagem para analisar");
     }
@@ -109,7 +122,7 @@ const App = () => {
           ) : (
             <NoImageDiv />
           )}
-          <label style={{marginBottom: '10px'}}>
+          <label style={{ marginBottom: '10px' }}>
             <Input type="file" accept=".jpg, .jpeg, .png" onChange={fileSelectedHandler} />
             <SButton id="upload-button" variant="outlined" size="small" component="span">
               Escolher Arquivo
